@@ -95,11 +95,9 @@ function useSectionReveal() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Animate heading from left
           if (heading) {
             gsap.to(heading, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" });
           }
-          // Stagger items
           gsap.to(items, {
             opacity: 1,
             y: 0,
@@ -108,7 +106,9 @@ function useSectionReveal() {
             stagger: 0.1,
             delay: 0.15,
           });
-          observer.unobserve(el);
+        } else {
+          if (heading) gsap.set(heading, { opacity: 0, x: -30 });
+          items.forEach((item) => gsap.set(item, { opacity: 0, y: 30 }));
         }
       },
       { threshold: 0.1 }

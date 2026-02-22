@@ -7,7 +7,6 @@ interface ScrollRevealOptions {
   from?: gsap.TweenVars;
   to?: gsap.TweenVars;
   threshold?: number;
-  once?: boolean;
 }
 
 export function useScrollReveal<T extends HTMLElement>(
@@ -18,7 +17,6 @@ export function useScrollReveal<T extends HTMLElement>(
     from = { opacity: 0, y: 40 },
     to = { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
     threshold = 0.2,
-    once = true,
   } = options;
 
   useEffect(() => {
@@ -40,7 +38,8 @@ export function useScrollReveal<T extends HTMLElement>(
       ([entry]) => {
         if (entry.isIntersecting) {
           gsap.to(el, to);
-          if (once) observer.unobserve(el);
+        } else {
+          gsap.set(el, from);
         }
       },
       { threshold }

@@ -51,6 +51,7 @@ export default function CareerPathSection() {
     threshold: 0.5,
   });
 
+  // Animate content on tab switch
   useEffect(() => {
     if (!contentRef.current) return;
 
@@ -69,6 +70,35 @@ export default function CareerPathSection() {
       { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
     );
   }, [activeIndex]);
+
+  // Reset content when section leaves viewport so it re-animates on re-entry
+  useEffect(() => {
+    const section = sectionRevealRef.current;
+    const content = contentRef.current;
+    if (!section || !content) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          gsap.fromTo(
+            content,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.5, ease: "power2.out", delay: 0.3 }
+          );
+        } else {
+          gsap.set(content, { opacity: 0, y: 30 });
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, [sectionRevealRef]);
 
   return (
     <section

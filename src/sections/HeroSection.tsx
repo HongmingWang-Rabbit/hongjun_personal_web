@@ -62,10 +62,10 @@ export default function HeroSection() {
         className="absolute bottom-16 left-6 md:bottom-20 md:left-8 lg:left-16 z-10"
         style={{ opacity: 0 }}
       >
-        <h1 className="heading-stretch-left font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-wider mb-2">
+        <h1 className="heading-stretch-left text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-wider mb-2" style={{ fontFamily: "'Orbitron', sans-serif" }}>
           BOB XU
         </h1>
-        <h2 className="heading-stretch-left font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
+        <h2 className="heading-stretch-left text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white" style={{ fontFamily: "'Orbitron', sans-serif" }}>
           ETERNAL SPACE
         </h2>
         <p className="heading-stretch-left text-[10px] sm:text-xs text-gray-400 mt-3 md:mt-4 tracking-wider font-bold">

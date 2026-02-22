@@ -77,6 +77,7 @@ export default function AbilitySection() {
   // --- Dots progress animation ---
   const toolsRef = useRef<HTMLDivElement>(null);
   const [dotsRevealed, setDotsRevealed] = useState(false);
+  const dotsTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
     const el = toolsRef.current;
@@ -92,11 +93,12 @@ export default function AbilitySection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Fade in the container
           gsap.to(el, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" });
-          // Trigger dot fill after a short delay
-          setTimeout(() => setDotsRevealed(true), 300);
-          observer.unobserve(el);
+          dotsTimerRef.current = setTimeout(() => setDotsRevealed(true), 300);
+        } else {
+          if (dotsTimerRef.current) clearTimeout(dotsTimerRef.current);
+          setDotsRevealed(false);
+          gsap.set(el, { opacity: 0, x: -40 });
         }
       },
       { threshold: 0.2 }
@@ -108,6 +110,7 @@ export default function AbilitySection() {
   // --- Radar chart expand animation ---
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartProgress, setChartProgress] = useState(0);
+  const chartTweenRef = useRef<gsap.core.Tween>(null);
 
   useEffect(() => {
     const el = chartRef.current;
@@ -123,18 +126,19 @@ export default function AbilitySection() {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Fade in the container
           gsap.to(el, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" });
-          // Animate the radar polygon expanding
           const proxy = { value: 0 };
-          gsap.to(proxy, {
+          chartTweenRef.current = gsap.to(proxy, {
             value: 1,
             duration: 1,
             delay: 0.3,
             ease: "power2.out",
             onUpdate: () => setChartProgress(proxy.value),
           });
-          observer.unobserve(el);
+        } else {
+          if (chartTweenRef.current) chartTweenRef.current.kill();
+          setChartProgress(0);
+          gsap.set(el, { opacity: 0, x: 40 });
         }
       },
       { threshold: 0.2 }
