@@ -1,21 +1,31 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import Navbar from "@/components/Navbar";
 
 export default function AboutPage() {
   const contentRef = useRef<HTMLDivElement>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
-    if (contentRef.current) {
-      gsap.fromTo(
-        contentRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-      );
+    if (!contentRef.current) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      gsap.set(contentRef.current, { opacity: 1, y: 0 });
+      return;
     }
+
+    gsap.fromTo(
+      contentRef.current,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+    );
   }, []);
 
   return (
@@ -32,18 +42,22 @@ export default function AboutPage() {
             {/* Photo */}
             <div className="flex justify-center lg:justify-start">
               <div className="relative w-64 h-80 md:w-80 md:h-96 overflow-hidden rounded-lg">
+                {!imageLoaded && (
+                  <div className="absolute inset-0 bg-gray-800 animate-pulse rounded-lg" />
+                )}
                 <Image
                   src="/about-photo.png"
                   alt="个人照片"
                   fill
-                  className="object-cover"
+                  className={`object-cover transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+                  onLoad={() => setImageLoaded(true)}
                 />
               </div>
             </div>
 
             {/* Bio */}
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8">
+              <h2 className="font-heading text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8">
                 折腾到底星人
               </h2>
               <div className="space-y-4 md:space-y-6 text-gray-300 text-sm md:text-base leading-relaxed">

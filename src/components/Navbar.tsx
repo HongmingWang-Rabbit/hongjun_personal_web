@@ -39,6 +39,7 @@ export default function Navbar() {
 
   return (
     <nav
+      aria-label="Main navigation"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled || mobileOpen ? "bg-black/80 backdrop-blur-md" : "bg-transparent"
       }`}
@@ -52,7 +53,8 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8 lg:gap-12">
           <button
             onClick={scrollToWork}
-            className={`text-sm tracking-wider transition-colors duration-300 hover:text-white ${
+            aria-current={isActive("/") ? "page" : undefined}
+            className={`font-heading text-sm tracking-wider cursor-pointer transition-colors duration-300 hover:text-white ${
               isActive("/") ? "text-white" : "text-gray-500"
             }`}
           >
@@ -60,7 +62,8 @@ export default function Navbar() {
           </button>
           <Link
             href="/portfolio"
-            className={`text-sm tracking-wider transition-colors duration-300 hover:text-white ${
+            aria-current={isActive("/portfolio") ? "page" : undefined}
+            className={`font-heading text-sm tracking-wider cursor-pointer transition-colors duration-300 hover:text-white ${
               isActive("/portfolio") ? "text-white" : "text-gray-500"
             }`}
           >
@@ -68,7 +71,8 @@ export default function Navbar() {
           </Link>
           <Link
             href="/about"
-            className={`text-sm tracking-wider transition-colors duration-300 hover:text-white ${
+            aria-current={isActive("/about") ? "page" : undefined}
+            className={`font-heading text-sm tracking-wider cursor-pointer transition-colors duration-300 hover:text-white ${
               isActive("/about") ? "text-white" : "text-gray-500"
             }`}
           >
@@ -76,7 +80,7 @@ export default function Navbar() {
           </Link>
           <button
             onClick={scrollToContact}
-            className="text-sm tracking-wider transition-colors duration-300 text-gray-500 hover:text-white"
+            className="font-heading text-sm tracking-wider cursor-pointer transition-colors duration-300 text-gray-500 hover:text-white"
           >
             联系
           </button>
@@ -84,9 +88,10 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
+          className="md:hidden flex flex-col gap-1.5 p-2 cursor-pointer"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
         >
           <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "rotate-45 translate-y-2" : ""}`} />
           <span className={`block w-6 h-0.5 bg-white transition-all duration-300 ${mobileOpen ? "opacity-0" : ""}`} />
@@ -103,27 +108,30 @@ export default function Navbar() {
         <div className="px-6 pb-6 flex flex-col gap-4">
           <button
             onClick={scrollToWork}
-            className={`text-left text-sm tracking-wider ${isActive("/") ? "text-white" : "text-gray-500"}`}
+            aria-current={isActive("/") ? "page" : undefined}
+            className={`text-left font-heading text-sm tracking-wider cursor-pointer ${isActive("/") ? "text-white" : "text-gray-500"}`}
           >
             工作
           </button>
           <Link
             href="/portfolio"
             onClick={() => setMobileOpen(false)}
-            className={`text-sm tracking-wider ${isActive("/portfolio") ? "text-white" : "text-gray-500"}`}
+            aria-current={isActive("/portfolio") ? "page" : undefined}
+            className={`font-heading text-sm tracking-wider cursor-pointer ${isActive("/portfolio") ? "text-white" : "text-gray-500"}`}
           >
             作品
           </Link>
           <Link
             href="/about"
             onClick={() => setMobileOpen(false)}
-            className={`text-sm tracking-wider ${isActive("/about") ? "text-white" : "text-gray-500"}`}
+            aria-current={isActive("/about") ? "page" : undefined}
+            className={`font-heading text-sm tracking-wider cursor-pointer ${isActive("/about") ? "text-white" : "text-gray-500"}`}
           >
             关于我
           </Link>
           <button
             onClick={scrollToContact}
-            className="text-left text-sm tracking-wider text-gray-500"
+            className="text-left font-heading text-sm tracking-wider cursor-pointer text-gray-500"
           >
             联系
           </button>

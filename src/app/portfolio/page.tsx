@@ -47,8 +47,17 @@ function ImagePreview({ src, onClose }: { src: string; onClose: () => void }) {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 md:p-8" onClick={onClose}>
-      <button className="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:text-gray-300 transition-colors">
+    <div
+      role="dialog"
+      aria-label="Image preview"
+      className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 md:p-8"
+      onClick={onClose}
+    >
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 md:top-6 md:right-6 text-white hover:text-gray-300 cursor-pointer transition-colors"
+        aria-label="Close preview"
+      >
         <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
         </svg>
@@ -58,38 +67,87 @@ function ImagePreview({ src, onClose }: { src: string; onClose: () => void }) {
   );
 }
 
-function PortfolioCard({ item }: { item: { title: string; image: string; link: string } }) {
+/** Hook: observe a container, then stagger-reveal its direct `[data-reveal]` children */
+function useSectionReveal() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      gsap.fromTo(ref.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" });
+    const el = ref.current;
+    if (!el) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Heading (first child with data-reveal-heading)
+    const heading = el.querySelector<HTMLElement>("[data-reveal-heading]");
+    // All stagger items
+    const items = el.querySelectorAll<HTMLElement>("[data-reveal-item]");
+
+    if (prefersReducedMotion) {
+      if (heading) gsap.set(heading, { opacity: 1, x: 0 });
+      items.forEach((item) => gsap.set(item, { opacity: 1, y: 0 }));
+      return;
     }
+
+    // Set initial state
+    if (heading) gsap.set(heading, { opacity: 0, x: -30 });
+    items.forEach((item) => gsap.set(item, { opacity: 0, y: 30 }));
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Animate heading from left
+          if (heading) {
+            gsap.to(heading, { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" });
+          }
+          // Stagger items
+          gsap.to(items, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: "power2.out",
+            stagger: 0.1,
+            delay: 0.15,
+          });
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
+  return ref;
+}
+
+function StatIcon({ type }: { type: "views" | "likes" | "favorites" }) {
+  if (type === "views")
+    return (
+      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+      </svg>
+    );
+  if (type === "likes")
+    return (
+      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+      </svg>
+    );
   return (
-    <div ref={ref} className="max-w-[200px]" style={{ opacity: 0 }}>
-      <a href={item.link} target="_blank" rel="noopener noreferrer" className="group block">
-        <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
-          <Image src={item.image} alt={item.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
-          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <span className="text-white text-sm">点击查看</span>
-          </div>
-        </div>
-      </a>
-    </div>
+    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+    </svg>
   );
 }
 
 export default function PortfolioPage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (sectionRef.current) {
-      gsap.fromTo(sectionRef.current, { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.out" });
-    }
-  }, []);
+  const culturalRef = useSectionReveal();
+  const aiRef = useSectionReveal();
+  const gameRef = useSectionReveal();
 
   return (
     <div className="min-h-screen bg-black">
@@ -97,68 +155,66 @@ export default function PortfolioPage() {
 
       {previewImage && <ImagePreview src={previewImage} onClose={() => setPreviewImage(null)} />}
 
-      <div ref={sectionRef} className="min-h-screen bg-black py-16 md:py-20" style={{ opacity: 0 }}>
+      <div className="min-h-screen bg-black py-16 md:py-20">
         <div className="w-full max-w-6xl mx-auto px-6 md:px-8 lg:px-16 pt-16 md:pt-20">
-          {/* Cultural/Travel Section */}
-          <div className="mb-16 md:mb-20">
-            <h3
-              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
-              style={{ transform: "scaleX(1.8)", transformOrigin: "left" }}
-            >
-              文旅综艺
+
+          {/* ── Cultural/Travel Section ── */}
+          <div ref={culturalRef} className="mb-20 md:mb-28">
+            <h3 data-reveal-heading className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold">
+              <span className="heading-stretch-left font-heading">文旅综艺</span>
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg">
               {culturalWorks.map((item) => (
-                <PortfolioCard key={item.title} item={item} />
+                <a
+                  key={item.title}
+                  data-reveal-item
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block cursor-pointer"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <span className="text-white text-xs font-heading">{item.title}</span>
+                    </div>
+                  </div>
+                </a>
               ))}
             </div>
           </div>
 
-          {/* AI Section */}
-          <div className="mb-16 md:mb-20">
-            <h3
-              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
-              style={{ transform: "scaleX(1.8)", transformOrigin: "left" }}
-            >
-              AI时代
+          {/* ── AI Section ── */}
+          <div ref={aiRef} className="mb-20 md:mb-28">
+            <h3 data-reveal-heading className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold">
+              <span className="heading-stretch-left font-heading">AI时代</span>
             </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
               {/* Main AI video */}
-              <div className="group cursor-pointer max-w-full lg:max-w-[300px]">
-                <a href="https://www.bilibili.com/video/BV1xAF4zKEXd/" target="_blank" rel="noopener noreferrer">
+              <div data-reveal-item>
+                <a href="https://www.bilibili.com/video/BV1xAF4zKEXd/" target="_blank" rel="noopener noreferrer" className="group block cursor-pointer">
                   <div className="relative overflow-hidden rounded-lg bg-gray-900">
                     <Image src="/work-ai-main.png" alt="看州视频" width={600} height={400} className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                       <span className="text-white text-sm">点击查看</span>
                     </div>
                   </div>
                 </a>
                 {/* Stats */}
-                <div className="flex items-center gap-4 md:gap-6 pt-3 md:pt-4">
-                  <div className="flex items-center gap-1 text-gray-500 text-xs">
-                    <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    <span>2.4w</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-gray-500 text-xs">
-                    <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                    <span>450+</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-gray-500 text-xs">
-                    <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                    </svg>
-                    <span>1104</span>
-                  </div>
+                <div className="flex items-center gap-5 pt-3 text-gray-500 text-xs">
+                  <div className="flex items-center gap-1"><StatIcon type="views" /><span>2.4w</span></div>
+                  <div className="flex items-center gap-1"><StatIcon type="likes" /><span>450+</span></div>
+                  <div className="flex items-center gap-1"><StatIcon type="favorites" /><span>1104</span></div>
                 </div>
               </div>
 
               {/* Thumbnails + description */}
-              <div className="space-y-4">
+              <div data-reveal-item className="space-y-4">
                 <div className="grid grid-cols-3 gap-2 md:gap-3">
                   {aiThumbs.map((thumb, i) => (
                     <div
@@ -170,25 +226,22 @@ export default function PortfolioPage() {
                     </div>
                   ))}
                 </div>
-                <div className="pt-2">
-                  <h4 className="text-white text-sm">【看州旧闻联播】90年代「超能儿童」研究热潮</h4>
-                  <p className="text-gray-500 text-xs mt-2">Nano Banana分镜生成+可灵图生视频</p>
+                <div className="pt-1">
+                  <h4 className="font-heading text-white text-sm">【看州旧闻联播】90年代「超能儿童」研究热潮</h4>
+                  <p className="text-gray-500 text-xs mt-1.5">Nano Banana分镜生成+可灵图生视频</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Game Culture Section */}
-          <div className="mb-16 md:mb-20">
-            <h3
-              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
-              style={{ transform: "scaleX(1.8)", transformOrigin: "left" }}
-            >
-              个人游戏文化频道
+          {/* ── Game Culture Section ── */}
+          <div ref={gameRef} className="mb-16 md:mb-20">
+            <h3 data-reveal-heading className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold">
+              <span className="heading-stretch-left font-heading">个人游戏文化频道</span>
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {gameWorks.map((work) => (
-                <div key={work.title}>
+                <div key={work.title} data-reveal-item>
                   <a href={work.link} target="_blank" rel="noopener noreferrer" className="group cursor-pointer block">
                     <div className="relative overflow-hidden rounded-lg bg-gray-900">
                       <Image
@@ -198,37 +251,22 @@ export default function PortfolioPage() {
                         height={400}
                         className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <span className="text-white text-sm">点击查看</span>
                       </div>
                     </div>
                   </a>
-                  <p className="mt-2 md:mt-3 text-sm text-white font-bold">{work.title}</p>
-                  <div className="flex items-center gap-3 md:gap-4 mt-1.5 md:mt-2 text-xs text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                      </svg>
-                      <span>{work.stats.views}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                      </svg>
-                      <span>{work.stats.likes}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                      </svg>
-                      <span>{work.stats.favorites}</span>
-                    </div>
+                  <p className="font-heading mt-2 md:mt-3 text-sm text-white font-bold">{work.title}</p>
+                  <div className="flex items-center gap-4 mt-1.5 text-xs text-gray-500">
+                    <div className="flex items-center gap-1"><StatIcon type="views" /><span>{work.stats.views}</span></div>
+                    <div className="flex items-center gap-1"><StatIcon type="likes" /><span>{work.stats.likes}</span></div>
+                    <div className="flex items-center gap-1"><StatIcon type="favorites" /><span>{work.stats.favorites}</span></div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+
         </div>
       </div>
     </div>

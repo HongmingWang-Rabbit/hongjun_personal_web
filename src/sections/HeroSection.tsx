@@ -12,6 +12,15 @@ export default function HeroSection() {
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      if (textRef.current) gsap.set(textRef.current, { opacity: 1, x: 0 });
+      return;
+    }
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && textRef.current) {
@@ -53,22 +62,13 @@ export default function HeroSection() {
         className="absolute bottom-16 left-6 md:bottom-20 md:left-8 lg:left-16 z-10"
         style={{ opacity: 0 }}
       >
-        <h1
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-wider mb-2"
-          style={{ transform: "scaleX(1.8)", transformOrigin: "left" }}
-        >
+        <h1 className="heading-stretch-left font-heading text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-wider mb-2">
           BOB XU
         </h1>
-        <h2
-          className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-[0.3em]"
-          style={{ transform: "scaleX(1.8)", transformOrigin: "left" }}
-        >
+        <h2 className="heading-stretch-left font-heading text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
           ETERNAL SPACE
         </h2>
-        <p
-          className="text-[10px] sm:text-xs text-gray-400 mt-3 md:mt-4 tracking-wider font-bold"
-          style={{ transform: "scaleX(1.8)", transformOrigin: "left" }}
-        >
+        <p className="heading-stretch-left text-[10px] sm:text-xs text-gray-400 mt-3 md:mt-4 tracking-wider font-bold">
           网站前端为AI辅助制作
         </p>
       </div>

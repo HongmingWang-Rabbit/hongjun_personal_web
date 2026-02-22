@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const careerData = [
   {
@@ -38,20 +39,43 @@ export default function CareerPathSection() {
   const contentRef = useRef<HTMLDivElement>(null);
   const current = careerData[activeIndex];
 
+  const sectionRevealRef = useScrollReveal<HTMLElement>({
+    from: { opacity: 0, y: 60 },
+    to: { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
+    threshold: 0.15,
+  });
+
+  const headingRef = useScrollReveal<HTMLHeadingElement>({
+    from: { opacity: 0, y: -20 },
+    to: { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", delay: 0.2 },
+    threshold: 0.5,
+  });
+
   useEffect(() => {
-    if (contentRef.current) {
-      gsap.fromTo(
-        contentRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
-      );
+    if (!contentRef.current) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      gsap.set(contentRef.current, { opacity: 1, y: 0 });
+      return;
     }
+
+    gsap.fromTo(
+      contentRef.current,
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" }
+    );
   }, [activeIndex]);
 
   return (
     <section
+      ref={sectionRevealRef}
       className="relative w-full min-h-screen flex items-center justify-center py-16 md:py-20"
       style={{
+        opacity: 0,
         backgroundImage: `url(${current.image})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -62,17 +86,14 @@ export default function CareerPathSection() {
 
       {/* Content */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-6 md:px-8 lg:px-16 pb-24">
-        <h2
-          className="text-center text-lg md:text-xl tracking-[0.3em] text-white mb-10 md:mb-16 font-bold"
-          style={{ transform: "scaleX(1.8)" }}
-        >
-          CAREER PATH
+        <h2 ref={headingRef} className="text-center text-lg md:text-xl text-white mb-6 md:mb-10 font-bold" style={{ opacity: 0 }}>
+          <span className="heading-stretch font-heading">CAREER PATH</span>
         </h2>
 
         <div ref={contentRef} className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 items-start">
           {/* Text content */}
           <div className="space-y-4 md:space-y-6">
-            <h3 className="text-2xl md:text-3xl font-bold text-white">{current.title}</h3>
+            <h3 className="font-heading text-2xl md:text-3xl font-bold text-white">{current.title}</h3>
             <p className="text-gray-300">
               {current.company} / {current.location} &nbsp;&nbsp; {current.period}
             </p>
@@ -113,9 +134,10 @@ export default function CareerPathSection() {
         <button
           onClick={() => setActiveIndex(Math.max(0, activeIndex - 1))}
           disabled={activeIndex === 0}
-          className={`w-10 h-10 rounded-full border border-gray-500 flex items-center justify-center transition-all duration-300 ${
+          aria-label="Previous career"
+          className={`w-10 h-10 rounded-full border border-gray-500 flex items-center justify-center cursor-pointer transition-all duration-300 ${
             activeIndex === 0
-              ? "opacity-30 cursor-not-allowed"
+              ? "opacity-30 cursor-not-allowed!"
               : "hover:bg-white/10 hover:border-white"
           }`}
         >
@@ -129,7 +151,8 @@ export default function CareerPathSection() {
             <button
               key={i}
               onClick={() => setActiveIndex(i)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+              aria-label={`Go to career ${i + 1}`}
+              className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ${
                 activeIndex === i ? "bg-white" : "bg-gray-600"
               }`}
             />
@@ -139,9 +162,10 @@ export default function CareerPathSection() {
         <button
           onClick={() => setActiveIndex(Math.min(careerData.length - 1, activeIndex + 1))}
           disabled={activeIndex === careerData.length - 1}
-          className={`w-10 h-10 rounded-full border border-gray-500 flex items-center justify-center transition-all duration-300 ${
+          aria-label="Next career"
+          className={`w-10 h-10 rounded-full border border-gray-500 flex items-center justify-center cursor-pointer transition-all duration-300 ${
             activeIndex === careerData.length - 1
-              ? "opacity-30 cursor-not-allowed"
+              ? "opacity-30 cursor-not-allowed!"
               : "hover:bg-white/10 hover:border-white"
           }`}
         >
