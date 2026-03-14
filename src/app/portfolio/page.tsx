@@ -384,92 +384,10 @@ export default function PortfolioPage() {
             </div>
           </div>
 
-          {/* ── Tech News Section ── */}
-          <div
-            ref={techNewsRef}
-            className="mb-20 md:mb-28"
-          >
-            <h3
-              data-reveal-heading
-              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
-            >
-              <span className="heading-stretch-left font-heading">
-                科技资讯
-              </span>
-            </h3>
-            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg">
-              {techNews.map((item) => (
-                <a
-                  key={item.link}
-                  data-reveal-item
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block cursor-pointer"
-                >
-                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                      <span className="text-white text-xs font-heading">
-                        {item.title}
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Blog Posts Section ── */}
-          <div
-            ref={blogRef}
-            className="mb-20 md:mb-28"
-          >
-            <h3
-              data-reveal-heading
-              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
-            >
-              <span className="heading-stretch-left font-heading">
-                公众号图文
-              </span>
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-              {blogPosts.map((item) => (
-                <a
-                  key={item.link}
-                  data-reveal-item
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block cursor-pointer"
-                >
-                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-video">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                      <span className="text-white text-xs font-heading">
-                        {item.title}
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-
           {/* ── Game Culture Section ── */}
           <div
             ref={gameRef}
-            className="mb-16 md:mb-20"
+            className="mb-20 md:mb-28"
           >
             <h3
               data-reveal-heading
@@ -522,6 +440,88 @@ export default function PortfolioPage() {
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Tech News Section ── */}
+          <div
+            ref={techNewsRef}
+            className="mb-20 md:mb-28"
+          >
+            <h3
+              data-reveal-heading
+              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
+            >
+              <span className="heading-stretch-left font-heading">
+                科技资讯
+              </span>
+            </h3>
+            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg">
+              {techNews.map((item) => (
+                <a
+                  key={item.link}
+                  data-reveal-item
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block cursor-pointer"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <span className="text-white text-xs font-heading">
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Blog Posts Section ── */}
+          <div
+            ref={blogRef}
+            className="mb-16 md:mb-20"
+          >
+            <h3
+              data-reveal-heading
+              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
+            >
+              <span className="heading-stretch-left font-heading">
+                公众号图文
+              </span>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              {blogPosts.map((item) => (
+                <a
+                  key={item.link}
+                  data-reveal-item
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block cursor-pointer"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-video">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <span className="text-white text-xs font-heading">
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                </a>
               ))}
             </div>
           </div>
