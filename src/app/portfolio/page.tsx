@@ -5,6 +5,15 @@ import Image from "next/image";
 import gsap from "gsap";
 import Navbar from "@/components/Navbar";
 
+// VFX works (特效作品集)
+const vfxWorks = [
+  {
+    title: "特效作品",
+    image: "/after-effect/11221773629407_.pic.jpg",
+    link: "https://www.douyin.com/video/7617679528021740842",
+  },
+];
+
 // Cultural works data
 const culturalWorks = [
   {
@@ -54,6 +63,20 @@ const blogPosts = [
     title: "海边音乐会 Seaside Music Festival",
     image: "/blogs-image/10801773448800_.pic_hd.jpg",
     link: "https://mp.weixin.qq.com/s/TOE0ETurEh9EZvPK7y3ZkA",
+  },
+];
+
+// Movie mashups (影视混剪)
+const movieMashups = [
+  {
+    title: "影视混剪 1",
+    image: "/cuts/11171773627385_.pic_hd.jpg",
+    link: "https://www.bilibili.com/video/BV1umCDBvEq2",
+  },
+  {
+    title: "影视混剪 2",
+    image: "/cuts/11181773627396_.pic.jpg",
+    link: "https://www.bilibili.com/video/BV1ZD421u7Aq",
   },
 ];
 
@@ -240,11 +263,13 @@ function StatIcon({ type }: { type: "views" | "likes" | "favorites" }) {
 export default function PortfolioPage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+  const vfxRef = useSectionReveal();
   const culturalRef = useSectionReveal();
   const aiRef = useSectionReveal();
   const techNewsRef = useSectionReveal();
   const blogRef = useSectionReveal();
   const gameRef = useSectionReveal();
+  const movieRef = useSectionReveal();
 
   return (
     <div className="min-h-screen bg-black">
@@ -259,6 +284,47 @@ export default function PortfolioPage() {
 
       <div className="min-h-screen bg-black py-16 md:py-20">
         <div className="w-full max-w-6xl mx-auto px-6 md:px-8 lg:px-16 pt-16 md:pt-20">
+          {/* ── VFX Section ── */}
+          <div
+            ref={vfxRef}
+            className="mb-20 md:mb-28"
+          >
+            <h3
+              data-reveal-heading
+              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
+            >
+              <span className="heading-stretch-left font-heading">
+                特效作品集
+              </span>
+            </h3>
+            <div className="grid grid-cols-1 gap-4 md:gap-6 max-w-lg">
+              {vfxWorks.map((item) => (
+                <a
+                  key={item.link}
+                  data-reveal-item
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block cursor-pointer"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-video">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <span className="text-white text-xs font-heading">
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
           {/* ── Cultural/Travel Section ── */}
           <div
             ref={culturalRef}
@@ -314,25 +380,18 @@ export default function PortfolioPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
               {/* Main AI video */}
               <div data-reveal-item>
-                <a
-                  href="https://www.bilibili.com/video/BV1xAF4zKEXd/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block cursor-pointer"
-                >
-                  <div className="relative overflow-hidden rounded-lg bg-gray-900">
-                    <Image
-                      src="/work-ai-main.png"
-                      alt="看州视频"
-                      width={600}
-                      height={400}
-                      className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <span className="text-white text-sm">点击查看</span>
-                    </div>
+                <div className="relative overflow-hidden rounded-lg bg-gray-900">
+                  <Image
+                    src="/work-ai-main.jpg"
+                    alt="看州视频"
+                    width={600}
+                    height={400}
+                    className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="text-white text-sm">点击查看</span>
                   </div>
-                </a>
+                </div>
                 {/* Stats */}
                 <div className="flex items-center gap-5 pt-3 text-gray-500 text-xs">
                   <div className="flex items-center gap-1">
@@ -440,6 +499,47 @@ export default function PortfolioPage() {
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Movie Mashup Section ── */}
+          <div
+            ref={movieRef}
+            className="mb-20 md:mb-28"
+          >
+            <h3
+              data-reveal-heading
+              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
+            >
+              <span className="heading-stretch-left font-heading">
+                影视混剪
+              </span>
+            </h3>
+            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg">
+              {movieMashups.map((item) => (
+                <a
+                  key={item.link}
+                  data-reveal-item
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block cursor-pointer"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <span className="text-white text-xs font-heading">
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                </a>
               ))}
             </div>
           </div>
