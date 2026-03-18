@@ -516,7 +516,7 @@ export default function PortfolioPage() {
                 影视混剪
               </span>
             </h3>
-            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {movieMashups.map((item) => (
                 <a
                   key={item.link}
@@ -526,7 +526,7 @@ export default function PortfolioPage() {
                   rel="noopener noreferrer"
                   className="group block cursor-pointer"
                 >
-                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-video">
                     <Image
                       src={item.image}
                       alt={item.title}
