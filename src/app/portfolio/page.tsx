@@ -38,6 +38,18 @@ const aiThumbs = [
   "/work-ai-thumb6.png",
 ];
 
+// GTA Radio screenshots
+const gtaRadioScreenshots = [
+  "/gta-radio/screenshot-1.jpg",
+  "/gta-radio/screenshot-2.jpg",
+  "/gta-radio/screenshot-3.jpg",
+  "/gta-radio/screenshot-4.jpg",
+  "/gta-radio/screenshot-5.jpg",
+  "/gta-radio/screenshot-6.jpg",
+  "/gta-radio/screenshot-7.jpg",
+  "/gta-radio/screenshot-8.jpg",
+];
+
 // Tech news
 const techNews = [
   {
@@ -325,124 +337,6 @@ export default function PortfolioPage() {
             </div>
           </div>
 
-          {/* ── Cultural/Travel Section ── */}
-          <div
-            ref={culturalRef}
-            className="mb-20 md:mb-28"
-          >
-            <h3
-              data-reveal-heading
-              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
-            >
-              <span className="heading-stretch-left font-heading">
-                文旅综艺
-              </span>
-            </h3>
-            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg">
-              {culturalWorks.map((item) => (
-                <a
-                  key={item.title}
-                  data-reveal-item
-                  href={item.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block cursor-pointer"
-                >
-                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
-                      <span className="text-white text-xs font-heading">
-                        {item.title}
-                      </span>
-                    </div>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </div>
-
-          {/* ── AI Section ── */}
-          <div
-            ref={aiRef}
-            className="mb-20 md:mb-28"
-          >
-            <h3
-              data-reveal-heading
-              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
-            >
-              <span className="heading-stretch-left font-heading">AI时代</span>
-            </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
-              {/* Main AI video */}
-              <div data-reveal-item>
-                <div className="relative overflow-hidden rounded-lg bg-gray-900">
-                  <Image
-                    src="/work-ai-main.jpg"
-                    alt="看州视频"
-                    width={600}
-                    height={400}
-                    className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <span className="text-white text-sm">点击查看</span>
-                  </div>
-                </div>
-                {/* Stats */}
-                <div className="flex items-center gap-5 pt-3 text-gray-500 text-xs">
-                  <div className="flex items-center gap-1">
-                    <StatIcon type="views" />
-                    <span>2.4w</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <StatIcon type="likes" />
-                    <span>450+</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <StatIcon type="favorites" />
-                    <span>1104</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Thumbnails + description */}
-              <div
-                data-reveal-item
-                className="space-y-4"
-              >
-                <div className="grid grid-cols-3 gap-2 md:gap-3">
-                  {aiThumbs.map((thumb, i) => (
-                    <div
-                      key={i}
-                      className="aspect-video bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
-                      onClick={() => setPreviewImage(thumb)}
-                    >
-                      <Image
-                        src={thumb}
-                        alt={`缩略图 ${i + 1}`}
-                        width={300}
-                        height={170}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="pt-1">
-                  <h4 className="font-heading text-white text-sm">
-                    【看州旧闻联播】90年代「超能儿童」研究热潮
-                  </h4>
-                  <p className="text-gray-500 text-xs mt-1.5">
-                    Nano Banana分镜生成+可灵图生视频
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* ── Game Culture Section ── */}
           <div
             ref={gameRef}
@@ -456,6 +350,70 @@ export default function PortfolioPage() {
                 个人游戏文化频道
               </span>
             </h3>
+
+            {/* GTA Radio Featured Video */}
+            <div data-reveal-item className="mb-8 md:mb-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+                {/* Left: main image */}
+                <a
+                  href="https://www.bilibili.com/video/BV1g84y1N7Eu"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group cursor-pointer block"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900">
+                    <Image
+                      src="/gta-radio/gta-radio-main.jpg"
+                      alt="GTA电台百科"
+                      width={600}
+                      height={400}
+                      className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                </a>
+                {/* Right: 8 screenshots + description */}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-4 gap-2 md:gap-3">
+                    {gtaRadioScreenshots.map((src, i) => (
+                      <div
+                        key={i}
+                        className="aspect-video bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+                        onClick={() => setPreviewImage(src)}
+                      >
+                        <Image
+                          src={src}
+                          alt={`电台截图 ${i + 1}`}
+                          width={300}
+                          height={170}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-gray-400 text-sm">
+                    这是一个对3A游戏大作GTA5内的不同音乐曲风的音乐电台（这些音乐都是70年代到10年代的热门欧美授权音乐，蕾哈娜、lady gaga、皇后乐队等）进行科普的电台
+                  </p>
+                </div>
+              </div>
+              <p className="font-heading mt-2 md:mt-3 text-sm text-white font-bold">
+                洛圣都人的飙车之声！【GTA电台百科 Vol.1】给他爱音乐科普
+              </p>
+              <div className="flex items-center gap-4 mt-1.5 text-xs text-gray-500">
+                <div className="flex items-center gap-1">
+                  <StatIcon type="views" />
+                  <span>2.6w</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <StatIcon type="likes" />
+                  <span>1750</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <StatIcon type="favorites" />
+                  <span>1021</span>
+                </div>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
               {gameWorks.map((work) => (
                 <div
@@ -527,6 +485,127 @@ export default function PortfolioPage() {
                   className="group block cursor-pointer"
                 >
                   <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-video">
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                      <span className="text-white text-xs font-heading">
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* ── AI Section ── */}
+          <div
+            ref={aiRef}
+            className="mb-20 md:mb-28"
+          >
+            <h3
+              data-reveal-heading
+              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
+            >
+              <span className="heading-stretch-left font-heading">AI时代</span>
+            </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-10">
+              {/* Main AI video */}
+              <div data-reveal-item>
+                <div
+                  className="relative overflow-hidden rounded-lg bg-gray-900 cursor-pointer group"
+                  onClick={() => setPreviewImage("/gta-radio/视频二维码.png")}
+                >
+                  <Image
+                    src="/work-ai-main.jpg"
+                    alt="看州视频"
+                    width={600}
+                    height={400}
+                    className="w-full h-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="text-white text-sm">点击查看二维码</span>
+                  </div>
+                </div>
+                {/* Stats */}
+                <div className="flex items-center gap-5 pt-3 text-gray-500 text-xs">
+                  <div className="flex items-center gap-1">
+                    <StatIcon type="views" />
+                    <span>2.4w</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <StatIcon type="likes" />
+                    <span>450+</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <StatIcon type="favorites" />
+                    <span>1104</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thumbnails + description */}
+              <div
+                data-reveal-item
+                className="space-y-4"
+              >
+                <div className="grid grid-cols-3 gap-2 md:gap-3">
+                  {aiThumbs.map((thumb, i) => (
+                    <div
+                      key={i}
+                      className="aspect-video bg-gray-800 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
+                      onClick={() => setPreviewImage(thumb)}
+                    >
+                      <Image
+                        src={thumb}
+                        alt={`缩略图 ${i + 1}`}
+                        width={300}
+                        height={170}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-1">
+                  <h4 className="font-heading text-white text-sm">
+                    【看州旧闻联播】90年代「超能儿童」研究热潮
+                  </h4>
+                  <p className="text-gray-500 text-xs mt-1.5">
+                    Nano Banana分镜生成+可灵图生视频
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Cultural/Travel Section ── */}
+          <div
+            ref={culturalRef}
+            className="mb-20 md:mb-28"
+          >
+            <h3
+              data-reveal-heading
+              className="text-base md:text-lg text-white mb-6 md:mb-8 font-bold"
+            >
+              <span className="heading-stretch-left font-heading">
+                文旅综艺
+              </span>
+            </h3>
+            <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-lg">
+              {culturalWorks.map((item) => (
+                <a
+                  key={item.title}
+                  data-reveal-item
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group block cursor-pointer"
+                >
+                  <div className="relative overflow-hidden rounded-lg bg-gray-900 aspect-[3/4]">
                     <Image
                       src={item.image}
                       alt={item.title}
