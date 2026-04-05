@@ -60,15 +60,14 @@ export default function Navbar() {
           >
             工作
           </button>
-          <Link
-            href="/portfolio"
-            aria-current={isActive("/portfolio") ? "page" : undefined}
-            className={`font-heading text-sm tracking-wider cursor-pointer transition-colors duration-300 hover:text-white ${
-              isActive("/portfolio") ? "text-white" : "text-gray-500"
-            }`}
+          <a
+            href="https://hongjun-xu-portfolio.my.canva.site/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-heading text-sm tracking-wider cursor-pointer transition-colors duration-300 hover:text-white text-gray-500"
           >
             作品
-          </Link>
+          </a>
           <Link
             href="/about"
             aria-current={isActive("/about") ? "page" : undefined}
@@ -113,14 +112,15 @@ export default function Navbar() {
           >
             工作
           </button>
-          <Link
-            href="/portfolio"
+          <a
+            href="https://hongjun-xu-portfolio.my.canva.site/"
+            target="_blank"
+            rel="noopener noreferrer"
             onClick={() => setMobileOpen(false)}
-            aria-current={isActive("/portfolio") ? "page" : undefined}
-            className={`font-heading text-sm tracking-wider cursor-pointer ${isActive("/portfolio") ? "text-white" : "text-gray-500"}`}
+            className="font-heading text-sm tracking-wider cursor-pointer text-gray-500"
           >
             作品
-          </Link>
+          </a>
           <Link
             href="/about"
             onClick={() => setMobileOpen(false)}
